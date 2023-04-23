@@ -1,9 +1,15 @@
+from asyncio import mixins
+
 from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
+from rest_framework import generics, viewsets
+
+from .models import Main
+from .serializers import MainSerializer
 
 
 def index(request):
@@ -68,3 +74,72 @@ class LoginUser(DataMixin, LoginView):
 def logoutUser(request):
     logout(request)
     return redirect('login')
+
+
+class Main:
+    pass
+
+class GenericViewSet:
+    pass
+
+
+class IsAuthenticatedOrReadOnly:
+    pass
+
+class IsAdminUser:
+    pass
+
+
+class MainAPIList(generics.ListCreateAPIView):
+    queryset = Main.objects.all()
+    serializer_class = MainSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly, )
+
+
+class MainAPIUpdate(generics.RetrieveUpdateAPIView):
+    queryset = Main.objects.all()
+    serializer_class = MainSerializer
+
+
+
+
+
+class MainAPIDestroy(generics.RetrieveDestroyAPIView):
+    queryset = Main.objects.all()
+    serializer_class = MainSerializer
+    permission_classes = (IsAdminUser, )
+
+
+
+
+
+#class MainViewSet(mixins.CreateModelMixin,
+#                 mixins.RetrieveModelMixin,
+#                 mixins.UpdateModelMixin,
+#                 mixins.DestroyModelMixin,
+#                 mixins.ListModelMixin,
+#                 GenericViewSet):
+#   queryset = Main.objects.all()
+#   serializer_class = MainSerializer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
